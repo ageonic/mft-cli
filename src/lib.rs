@@ -95,21 +95,16 @@ pub struct TrackingInfo {
 impl Shipment {
     pub fn show(&self) {
         let table = table!(
-            [
-                "Delivery date",
-                "Delayed",
-                "Tracking number",
-                "Tracking URL"
-            ],
+            ["Delivery date", "Delayed", "Tracking number",],
             [
                 self.delivery_date,
                 self.delayed,
                 self.tracking_info.tracking_number,
-                self.tracking_info.tracking_link
             ]
         );
 
         table.printstd();
+        println!("\nTracking URL: {}", self.tracking_info.tracking_link);
     }
 
     pub fn show_verbose(&self) {
@@ -122,7 +117,6 @@ impl Shipment {
                 "Carrier",
                 "Status",
                 "Tracking number",
-                "Tracking URL"
             ],
             [
                 self.id,
@@ -138,10 +132,10 @@ impl Shipment {
                     .unwrap_or(&String::from("-")),
                 self.tracking_info.status,
                 self.tracking_info.tracking_number,
-                self.tracking_info.tracking_link
             ]
         );
 
         table.printstd();
+        println!("\nTracking URL: {}", self.tracking_info.tracking_link);
     }
 }
