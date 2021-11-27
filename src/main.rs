@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate prettytable;
+
 use reqwest::header::USER_AGENT;
 use serde::Deserialize;
 use std::error::Error;
@@ -31,6 +34,60 @@ struct TrackingInfo {
     tracking_number: String,
     #[serde(rename = "trackingLink")]
     tracking_link: String,
+}
+
+impl Shipment {
+    fn show(&self) {
+        let table = table!(
+            [
+                "Delivery date",
+                "Delayed",
+                "Tracking number",
+                "Tracking URL"
+            ],
+            [
+                self.delivery_date,
+                self.delayed,
+                self.tracking_info.tracking_number,
+                self.tracking_info.tracking_link
+            ]
+        );
+
+        table.printstd();
+    }
+
+    fn show_verbose(&self) {
+        let table = table!(
+            [
+                "Shipment ID",
+                "Delivery date",
+                "Expected time",
+                "Delayed",
+                "Carrier",
+                "Status",
+                "Tracking number",
+                "Tracking URL"
+            ],
+            [
+                self.id,
+                self.delivery_date,
+                self.tracking_info
+                    .expected_time
+                    .as_ref()
+                    .unwrap_or(&String::from("-")),
+                self.delayed,
+                self.tracking_info
+                    .carrier
+                    .as_ref()
+                    .unwrap_or(&String::from("-")),
+                self.tracking_info.status,
+                self.tracking_info.tracking_number,
+                self.tracking_info.tracking_link
+            ]
+        );
+
+        table.printstd();
+    }
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
